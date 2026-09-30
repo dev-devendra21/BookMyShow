@@ -4,7 +4,7 @@ import logger from '../lib/logger.js';
 
 const connectDB = async (): Promise<void> => {
     await mongoose.connect(env.MONGODB_URI);
-    logger.info('Connected to MongoDB');
+    logger.info('Successfully connected to Database');
 };
 
 export default connectDB;
