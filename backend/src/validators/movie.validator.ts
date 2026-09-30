@@ -46,6 +46,20 @@ export const updateMovieIdParams = z.object({
         .refine((id) => mongoose.isValidObjectId(id), 'Invalid movie ID'),
 });
 
+export const getAllMoviesQueryParams = z.object({
+    page: z.coerce.number().int().min(1, 'Page must be at least 1').default(1),
+
+    limit: z.coerce
+        .number()
+        .int()
+        .min(1, 'Limit must be at least 1')
+        .max(100, 'Limit cannot exceed 100')
+        .default(10),
+});
+
 export type MovieDTO = z.infer<typeof movieSchema>;
 export type UpdateMovieDTO = z.infer<typeof updateMovieSchema>;
 export type UpdateMovieIdParamsDTO = z.infer<typeof updateMovieIdParams>;
+export type GetAllMoviesQueryParamsDTO = z.infer<
+    typeof getAllMoviesQueryParams
+>;

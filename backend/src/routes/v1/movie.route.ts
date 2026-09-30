@@ -3,8 +3,10 @@ import asyncHandler from '../../utils/async-handler.js';
 import {
     validateBodySchema,
     validateParamsSchema,
+    validateQuerySchema,
 } from '../../middlewares/validation.middleware.js';
 import {
+    getAllMoviesQueryParams,
     movieSchema,
     updateMovieIdParams,
     updateMovieSchema,
@@ -27,4 +29,9 @@ route.patch(
     asyncHandler(movieController.updateMovie.bind(movieController)),
 );
 
+route.get(
+    '/',
+    validateQuerySchema(getAllMoviesQueryParams),
+    asyncHandler(movieController.getAllMovies.bind(movieController)),
+);
 export default route;

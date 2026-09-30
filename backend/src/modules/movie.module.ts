@@ -9,7 +9,7 @@ export default function movieModule() {
 
     const movieService = new MovieService(movieRepository, logger);
 
-    const movieController = new MovieController(movieService, logger);
+    const movieController = new MovieController(movieService);
 
     return movieController;
 }

@@ -1,13 +1,13 @@
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
-
 import type { ZodType } from 'zod';
-
 import { errorResponse } from '../utils/api-response.js';
 import status from 'http-status';
 
+type ValidationSource = 'body' | 'params' | 'query';
+
 const validateSchema = (
     schema: ZodType,
-    source: 'body' | 'params',
+    source: ValidationSource,
 ): RequestHandler => {
     return (req: Request, res: Response, next: NextFunction) => {
         const result = schema.safeParse(req[source]);
@@ -35,4 +35,8 @@ export const validateBodySchema = (schema: ZodType): RequestHandler => {
 
 export const validateParamsSchema = (schema: ZodType): RequestHandler => {
     return validateSchema(schema, 'params');
+};
+
+export const validateQuerySchema = (schema: ZodType): RequestHandler => {
+    return validateSchema(schema, 'query');
 };

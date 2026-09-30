@@ -42,4 +42,34 @@ export default class MovieService {
 
         return movie;
     }
+
+    async getAllMovies(page: number, limit: number) {
+        const skip = (page - 1) * limit;
+
+        const { movies, total } = await this.movieRepository.getAllMovies(
+            skip,
+            limit,
+        );
+
+        const totalPages = Math.ceil(total / limit);
+
+        this.logger.info('Movies retrieved successfully', {
+            page,
+            limit,
+            count: movies.length,
+            total,
+        });
+
+        return {
+            movies,
+            pagination: {
+                page,
+                limit,
+                total,
+                totalPages,
+                hasNextPage: page < totalPages,
+                hasPreviousPage: page > 1,
+            },
+        };
+    }
 }

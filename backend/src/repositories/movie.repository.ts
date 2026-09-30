@@ -19,4 +19,17 @@ export default class MovieRepository {
             runValidators: true,
         });
     }
+
+    async getAllMovies(skip: number, limit: number) {
+        const [movies, total] = await Promise.all([
+            this.movie.find().select('-__v').skip(skip).limit(limit).lean(),
+
+            this.movie.countDocuments(),
+        ]);
+
+        return {
+            movies,
+            total,
+        };
+    }
 }

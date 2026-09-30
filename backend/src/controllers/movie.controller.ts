@@ -1,7 +1,6 @@
 import status from 'http-status';
-import type { Logger } from 'winston';
 import { successResponse } from '../utils/api-response.js';
-import type { Response } from 'express';
+import type { Request, Response } from 'express';
 import type {
     CreateMovieRequest,
     UpdateMovieRequest,
@@ -33,6 +32,18 @@ export default class MovieController {
             successResponse('Movie updated successfully', {
                 movieId: movie._id.toString(),
             }),
+        );
+    }
+
+    async getAllMovies(req: Request, res: Response) {
+        const { page, limit } = req.query;
+        const result = await this.movieService.getAllMovies(
+            Number(page),
+            Number(limit),
+        );
+
+        res.status(status.OK).json(
+            successResponse('Movies retrieved successfully', result),
         );
     }
 }
