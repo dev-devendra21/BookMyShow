@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import pingRoute from './ping.route.js';
+import movieRoute from './movie.route.js';
 
 const route = Router();
 
-route.use('/ping', pingRoute);
+route.use('/movies', movieRoute);
 
 export default route;
