@@ -8,6 +8,7 @@ export interface ITheatre extends Document {
     pincode: string;
     state: string;
     status: 'ACTIVE' | 'INACTIVE';
+    movies: Schema.Types.ObjectId[];
 }
 
 const theatreSchema = new Schema<ITheatre>(
@@ -59,6 +60,10 @@ const theatreSchema = new Schema<ITheatre>(
             type: String,
             enum: ['ACTIVE', 'INACTIVE'],
             default: 'ACTIVE',
+        },
+
+        movies: {
+            type: [{ type: Schema.Types.ObjectId, ref: 'Movie' }],
         },
     },
     {
