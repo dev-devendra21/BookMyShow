@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import pingRoute from './ping.route.js';
+import theatreRoute from './theatre.route.js';
 
 const route = Router();
 
-route.use('/ping', pingRoute);
+route.use('/theatres', theatreRoute);
 
 export default route;
