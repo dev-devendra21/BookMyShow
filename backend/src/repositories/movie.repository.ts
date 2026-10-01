@@ -22,7 +22,13 @@ export default class MovieRepository {
 
     async getAllMovies(skip: number, limit: number) {
         const [movies, total] = await Promise.all([
-            this.movie.find().select('-__v').skip(skip).limit(limit).lean(),
+            this.movie
+                .find()
+                .select('-__v')
+                .skip(skip)
+                .limit(limit)
+                .lean()
+                .sort({ releaseDate: -1 }),
 
             this.movie.countDocuments(),
         ]);
@@ -31,5 +37,9 @@ export default class MovieRepository {
             movies,
             total,
         };
+    }
+
+    async deleteMovie(id: string) {
+        return await this.movie.findByIdAndDelete(id);
     }
 }

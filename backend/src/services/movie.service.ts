@@ -72,4 +72,18 @@ export default class MovieService {
             },
         };
     }
+
+    async deleteMovie(id: string) {
+        const movie = await this.movieRepository.deleteMovie(id);
+        if (!movie) {
+            this.logger.warn('Movie deletion failed: movie not found', {
+                movieId: id,
+            });
+            throw createHttpError.NotFound('Movie not found');
+        }
+        this.logger.info('Movie deleted successfully', {
+            movieId: movie._id.toString(),
+            title: movie.title,
+        });
+    }
 }

@@ -46,4 +46,12 @@ export default class MovieController {
             successResponse('Movies retrieved successfully', result),
         );
     }
+
+    async deleteMovie(req: Request, res: Response) {
+        const { id } = req.params;
+        await this.movieService.deleteMovie(id as string);
+        res.status(status.OK).json(
+            successResponse('Movie deleted successfully'),
+        );
+    }
 }

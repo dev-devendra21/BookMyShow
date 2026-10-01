@@ -10,8 +10,10 @@ export const movieSchema = z.object({
     description: z
         .string('Description is required')
         .trim()
-        .min(100, 'Description must be at least 100 characters long'),
-
+        .min(50, 'Description must be at least 50 characters long'),
+    genre: z
+        .array(z.string('Each genre must be a string').trim())
+        .min(1, 'At least one genre is required'),
     cast: z
         .array(z.string('Each cast member must be a string').trim())
         .min(1, 'At least one cast member is required'),
@@ -40,7 +42,7 @@ export const movieSchema = z.object({
 
 export const updateMovieSchema = movieSchema.partial();
 
-export const updateMovieIdParams = z.object({
+export const movieIdParams = z.object({
     id: z
         .string('Movie ID is required')
         .refine((id) => mongoose.isValidObjectId(id), 'Invalid movie ID'),
@@ -59,7 +61,7 @@ export const getAllMoviesQueryParams = z.object({
 
 export type MovieDTO = z.infer<typeof movieSchema>;
 export type UpdateMovieDTO = z.infer<typeof updateMovieSchema>;
-export type UpdateMovieIdParamsDTO = z.infer<typeof updateMovieIdParams>;
+export type MovieIdParamsDTO = z.infer<typeof movieIdParams>;
 export type GetAllMoviesQueryParamsDTO = z.infer<
     typeof getAllMoviesQueryParams
 >;

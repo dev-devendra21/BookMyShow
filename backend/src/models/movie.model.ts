@@ -3,6 +3,7 @@ import { model, Schema, type Model } from 'mongoose';
 export interface IMovie {
     title: string;
     description: string;
+    genre: string[];
     cast: string[];
     trailerUrl: string;
     language: string[];
@@ -27,6 +28,15 @@ const movieSchema = new Schema<IMovie>(
             trim: true,
             minlength: [10, 'Description must be at least 10 characters'],
             maxlength: [2000, 'Description cannot exceed 2000 characters'],
+        },
+
+        genre: {
+            type: [String],
+            required: [true, 'Genre is required'],
+            validate: {
+                validator: (value: string[]) => value.length > 0,
+                message: 'At least one genre is required',
+            },
         },
 
         cast: {
@@ -85,6 +95,8 @@ const movieSchema = new Schema<IMovie>(
         timestamps: true,
     },
 );
+
+movieSchema.index({ title: 1, releaseDate: -1 });
 
 const MovieModel: Model<IMovie> = model<IMovie>('Movie', movieSchema);
 
