@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { z } from 'zod';
+import { RELEASE_STATUS } from '../constant/movie.js';
 
 export const movieSchema = z.object({
     title: z
@@ -48,7 +49,21 @@ export const movieIdParams = z.object({
         .refine((id) => mongoose.isValidObjectId(id), 'Invalid movie ID'),
 });
 
-export const getAllMoviesQueryParams = z.object({
+export const moviesQueryParams = z.object({
+    genre: z.string().trim().min(1, 'Genre cannot be empty').optional(),
+
+    language: z.string().trim().min(1, 'Language cannot be empty').optional(),
+
+    search: z.string().trim().min(1, 'Search cannot be empty').optional(),
+
+    releaseStatus: z
+        .enum([
+            RELEASE_STATUS.RELEASED,
+            RELEASE_STATUS.UPCOMING,
+            RELEASE_STATUS.ENDED,
+        ])
+        .optional(),
+
     page: z.coerce.number().int().min(1, 'Page must be at least 1').default(1),
 
     limit: z.coerce
@@ -62,6 +77,4 @@ export const getAllMoviesQueryParams = z.object({
 export type MovieDTO = z.infer<typeof movieSchema>;
 export type UpdateMovieDTO = z.infer<typeof updateMovieSchema>;
 export type MovieIdParamsDTO = z.infer<typeof movieIdParams>;
-export type GetAllMoviesQueryParamsDTO = z.infer<
-    typeof getAllMoviesQueryParams
->;
+export type MoviesQueryParamsDTO = z.infer<typeof moviesQueryParams>;

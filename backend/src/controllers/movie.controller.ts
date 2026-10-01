@@ -6,6 +6,8 @@ import type {
     UpdateMovieRequest,
 } from '../types/movie.type.js';
 import type MovieService from '../services/movie.service.js';
+import type { RELEASE_STATUS } from '../constant/movie.js';
+import type { MoviesQueryParamsDTO } from '../validators/movie.validator.js';
 
 export default class MovieController {
     constructor(private readonly movieService: MovieService) {}
@@ -35,12 +37,18 @@ export default class MovieController {
         );
     }
 
-    async getAllMovies(req: Request, res: Response) {
-        const { page, limit } = req.query;
-        const result = await this.movieService.getAllMovies(
-            Number(page),
-            Number(limit),
-        );
+    async getMovies(req: Request, res: Response) {
+        const { page, limit, genre, language, releaseStatus, search } =
+            req.query;
+
+        const result = await this.movieService.getMovies({
+            page,
+            limit,
+            genre,
+            language,
+            releaseStatus,
+            search,
+        } as unknown as MoviesQueryParamsDTO);
 
         res.status(status.OK).json(
             successResponse('Movies retrieved successfully', result),

@@ -2,6 +2,7 @@ import type { Logger } from 'winston';
 
 import type {
     MovieDTO,
+    MoviesQueryParamsDTO,
     UpdateMovieDTO,
 } from '../validators/movie.validator.js';
 import type MovieRepository from '../repositories/movie.repository.js';
@@ -43,10 +44,38 @@ export default class MovieService {
         return movie;
     }
 
-    async getAllMovies(page: number, limit: number) {
+    async getMovies({
+        page,
+        limit,
+        search,
+        genre,
+        language,
+        releaseStatus,
+    }: MoviesQueryParamsDTO) {
         const skip = (page - 1) * limit;
 
-        const { movies, total } = await this.movieRepository.getAllMovies(
+        const filter = {
+            ...(search && {
+                $or: [
+                    { title: { $regex: search, $options: 'i' } },
+                    { cast: { $regex: search, $options: 'i' } },
+                    { director: { $regex: search, $options: 'i' } },
+                ],
+            }),
+            ...(genre?.length && {
+                genre: { $in: genre },
+            }),
+
+            ...(language?.length && {
+                language: { $in: language },
+            }),
+
+            ...(releaseStatus && {
+                releaseStatus,
+            }),
+        };
+        const { movies, total } = await this.movieRepository.getMovies(
+            filter,
             skip,
             limit,
         );

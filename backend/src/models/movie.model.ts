@@ -1,4 +1,5 @@
 import { model, Schema, type Model } from 'mongoose';
+import { RELEASE_STATUS } from '../constant/movie.js';
 
 export interface IMovie {
     title: string;
@@ -8,7 +9,7 @@ export interface IMovie {
     trailerUrl: string;
     language: string[];
     releaseDate: Date;
-    releaseStatus: 'RELEASED' | 'UPCOMING' | 'ENDED';
+    releaseStatus: (typeof RELEASE_STATUS)[keyof typeof RELEASE_STATUS];
     director: string;
 }
 
@@ -77,10 +78,14 @@ const movieSchema = new Schema<IMovie>(
             type: String,
             required: [true, 'Release status is required'],
             enum: {
-                values: ['RELEASED', 'UPCOMING', 'ENDED'],
+                values: [
+                    RELEASE_STATUS.RELEASED,
+                    RELEASE_STATUS.UPCOMING,
+                    RELEASE_STATUS.ENDED,
+                ],
                 message: '{VALUE} is not a valid release status',
             },
-            default: 'RELEASED',
+            default: RELEASE_STATUS.RELEASED,
         },
 
         director: {
@@ -96,7 +101,7 @@ const movieSchema = new Schema<IMovie>(
     },
 );
 
-movieSchema.index({ title: 1, releaseDate: -1 });
+movieSchema.index({ releaseDate: -1 });
 
 const MovieModel: Model<IMovie> = model<IMovie>('Movie', movieSchema);
 

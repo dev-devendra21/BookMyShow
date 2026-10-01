@@ -6,9 +6,9 @@ import {
     validateQuerySchema,
 } from '../../middlewares/validation.middleware.js';
 import {
-    getAllMoviesQueryParams,
     movieIdParams,
     movieSchema,
+    moviesQueryParams,
     updateMovieSchema,
 } from '../../validators/movie.validator.js';
 import movieModule from '../../modules/movie.module.js';
@@ -16,10 +16,18 @@ import movieModule from '../../modules/movie.module.js';
 const route = Router();
 
 const movieController = movieModule();
+
 route.post(
     '/',
     validateBodySchema(movieSchema),
     asyncHandler(movieController.createMovie.bind(movieController)),
+);
+
+route.put(
+    '/:id',
+    validateParamsSchema(movieIdParams),
+    validateBodySchema(movieSchema),
+    asyncHandler(movieController.updateMovie.bind(movieController)),
 );
 
 route.patch(
@@ -31,8 +39,8 @@ route.patch(
 
 route.get(
     '/',
-    validateQuerySchema(getAllMoviesQueryParams),
-    asyncHandler(movieController.getAllMovies.bind(movieController)),
+    validateQuerySchema(moviesQueryParams),
+    asyncHandler(movieController.getMovies.bind(movieController)),
 );
 
 route.delete(

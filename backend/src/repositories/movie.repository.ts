@@ -20,17 +20,17 @@ export default class MovieRepository {
         });
     }
 
-    async getAllMovies(skip: number, limit: number) {
+    async getMovies(filter: any, skip: number, limit: number) {
         const [movies, total] = await Promise.all([
             this.movie
-                .find()
+                .find(filter)
                 .select('-__v')
                 .skip(skip)
                 .limit(limit)
                 .lean()
                 .sort({ releaseDate: -1 }),
 
-            this.movie.countDocuments(),
+            this.movie.countDocuments(filter),
         ]);
 
         return {
