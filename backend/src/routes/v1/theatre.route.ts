@@ -4,6 +4,7 @@ import createTheatreModule from '../../modules/theatre.module.js';
 import {
     validateBodySchema,
     validateParamsSchema,
+    validateQuerySchema,
     // validateQuerySchema,
 } from './../../middlewares/validation.middleware.js';
 import {
@@ -45,7 +46,7 @@ route.get(
 
 route.get(
     '/',
-    // validateQuerySchema(theatreQuerySchema),
+    validateQuerySchema(theatreQuerySchema),
     asyncHandler(theatreController.getTheatres.bind(theatreController)),
 );
 

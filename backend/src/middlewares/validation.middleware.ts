@@ -7,7 +7,7 @@ import status from 'http-status';
 
 const validateSchema = (
     schema: ZodType,
-    source: 'body' | 'params',
+    source: 'body' | 'params' | 'query',
 ): RequestHandler => {
     return (req: Request, res: Response, next: NextFunction) => {
         const result = schema.safeParse(req[source]);
@@ -35,4 +35,8 @@ export const validateBodySchema = (schema: ZodType): RequestHandler => {
 
 export const validateParamsSchema = (schema: ZodType): RequestHandler => {
     return validateSchema(schema, 'params');
+};
+
+export const validateQuerySchema = (schema: ZodType): RequestHandler => {
+    return validateSchema(schema, 'query');
 };
