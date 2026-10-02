@@ -57,6 +57,7 @@ export default class TheatreService {
         pincode,
         state,
         status,
+        movieId,
     }: TheatreQueryDTO) {
         this.logger.info('Retrieving theatres');
 
@@ -76,7 +77,7 @@ export default class TheatreService {
             ...(city && { city: { $regex: city, $options: 'i' } }),
             ...(pincode && { pincode: { $regex: pincode, $options: 'i' } }),
             ...(state && { state: { $regex: state, $options: 'i' } }),
-
+            ...(movieId && { movies: { $elemMatch: { $eq: movieId } } }),
             ...(status && {
                 status,
             }),

@@ -58,6 +58,7 @@ export default class TheatreController {
             pincode,
             city,
             state,
+            movieId,
         } = req.query as unknown as TheatreQueryDTO;
 
         const data = await this.theatreService.getTheatre({
@@ -68,6 +69,7 @@ export default class TheatreController {
             city,
             state,
             status: theatreStatus,
+            movieId,
         });
 
         res.status(status.OK).json(

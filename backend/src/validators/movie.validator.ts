@@ -30,7 +30,11 @@ export const movieSchema = z.object({
 
     releaseStatus: z
         .enum(
-            ['RELEASED', 'UPCOMING', 'ENDED'],
+            [
+                RELEASE_STATUS.RELEASED,
+                RELEASE_STATUS.UPCOMING,
+                RELEASE_STATUS.ENDED,
+            ],
             'Release status must be RELEASED, UPCOMING, or ENDED',
         )
         .default('RELEASED'),

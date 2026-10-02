@@ -61,6 +61,13 @@ export const theatreQuerySchema = z.object({
     pincode: z.string().optional(),
     city: z.string().optional(),
     state: z.string().optional(),
+    movieId: z
+        .string()
+        .optional()
+        .refine(
+            (id) => !id || mongoose.isValidObjectId(id),
+            'Invalid movie ID',
+        ),
 });
 
 export const movieIdsInTheatreSchema = z.object({
