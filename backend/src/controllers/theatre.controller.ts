@@ -7,6 +7,7 @@ import type {
     UpdateTheatreRequest,
 } from '../types/theatre.type.js';
 import type {
+    MovieIdsInTheatreDTO,
     TheatreIdParamsDTO,
     TheatreQueryDTO,
 } from '../validators/theatre.validator.js';
@@ -54,12 +55,18 @@ export default class TheatreController {
             limit,
             search,
             status: theatreStatus,
+            pincode,
+            city,
+            state,
         } = req.query as unknown as TheatreQueryDTO;
 
         const data = await this.theatreService.getTheatre({
             page,
             limit,
             search,
+            pincode,
+            city,
+            state,
             status: theatreStatus,
         });
 
@@ -74,6 +81,27 @@ export default class TheatreController {
         await this.theatreService.deleteTheatre(theatreId);
         res.status(status.OK).json(
             successResponse('Theatre deleted successfully'),
+        );
+    }
+
+    async updateMoviesInTheatre(req: Request, res: Response) {
+        const { id: theatreId } = req.params as TheatreIdParamsDTO;
+        const { movieIds, insert } = req.body as MovieIdsInTheatreDTO;
+
+        const updatedTheatre = await this.theatreService.updateMoviesInTheatre(
+            theatreId,
+            movieIds,
+            insert,
+        );
+
+        res.status(status.OK).json(
+            successResponse(
+                `Movies ${insert ? 'added to' : 'removed from'} theatre successfully`,
+                {
+                    id: updatedTheatre._id,
+                    movies: updatedTheatre.movies,
+                },
+            ),
         );
     }
 }

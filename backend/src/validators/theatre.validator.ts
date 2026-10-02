@@ -58,6 +58,23 @@ export const theatreQuerySchema = z.object({
         .refine((val) => val > 0, 'Limit must be greater than 0'),
     status: theatreStatusSchema.optional(),
     search: z.string().optional(),
+    pincode: z.string().optional(),
+    city: z.string().optional(),
+    state: z.string().optional(),
+});
+
+export const movieIdsInTheatreSchema = z.object({
+    movieIds: z
+        .array(
+            z
+                .string()
+                .refine(
+                    (id) => mongoose.isValidObjectId(id),
+                    'Invalid movie ID',
+                ),
+        )
+        .nonempty('Movie IDs array cannot be empty'),
+    insert: z.boolean(),
 });
 
 export const updateTheatreSchema = theatreSchema.partial();
@@ -66,3 +83,4 @@ export type CreateTheatreDTO = z.infer<typeof theatreSchema>;
 export type UpdateTheatreDTO = z.infer<typeof updateTheatreSchema>;
 export type TheatreIdParamsDTO = z.infer<typeof theatreIdParamsSchema>;
 export type TheatreQueryDTO = z.infer<typeof theatreQuerySchema>;
+export type MovieIdsInTheatreDTO = z.infer<typeof movieIdsInTheatreSchema>;

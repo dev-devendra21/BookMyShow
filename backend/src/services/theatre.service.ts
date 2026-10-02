@@ -49,7 +49,15 @@ export default class TheatreService {
         return theatre;
     }
 
-    async getTheatre({ page, limit, search, status }: TheatreQueryDTO) {
+    async getTheatre({
+        page,
+        limit,
+        search,
+        city,
+        pincode,
+        state,
+        status,
+    }: TheatreQueryDTO) {
         this.logger.info('Retrieving theatres');
 
         const skip = (page - 1) * limit;
@@ -64,6 +72,10 @@ export default class TheatreService {
                     { pincode: { $regex: search, $options: 'i' } },
                 ],
             }),
+
+            ...(city && { city: { $regex: city, $options: 'i' } }),
+            ...(pincode && { pincode: { $regex: pincode, $options: 'i' } }),
+            ...(state && { state: { $regex: state, $options: 'i' } }),
 
             ...(status && {
                 status,
@@ -103,5 +115,80 @@ export default class TheatreService {
         this.logger.info('Theatre deleted successfully', {
             theatreId: deletedTheatre._id,
         });
+    }
+
+    async updateMoviesInTheatre(
+        theatreId: string,
+        movieIds: string[],
+        insert: boolean,
+    ) {
+        this.logger.info(`Updating movies in theatre with ID: ${theatreId}`);
+
+        const theatre = await this.theatreRepository.getTheatreById(theatreId);
+
+        if (!theatre) {
+            this.logger.warn(
+                `No such theatre found for the id provided: ${theatreId}`,
+            );
+
+            throw createHttpError.NotFound(
+                'No such theatre found for the id provided',
+            );
+        }
+
+        const theatreMovieIds = theatre.movies.map((movieId) =>
+            movieId.toString(),
+        );
+
+        if (insert) {
+            const newMovieIds = movieIds.filter(
+                (movieId) => !theatreMovieIds.includes(movieId),
+            );
+
+            if (newMovieIds.length === 0) {
+                this.logger.info(
+                    'All movies are already present in the theatre',
+                );
+
+                throw createHttpError.BadRequest(
+                    'All movies are already present in the theatre',
+                );
+            }
+
+            await this.theatreRepository.addMoviesToTheatre(
+                theatreId,
+                newMovieIds,
+            );
+        } else {
+            const existingMovieIds = movieIds.filter((movieId) =>
+                theatreMovieIds.includes(movieId),
+            );
+
+            if (existingMovieIds.length === 0) {
+                this.logger.info(
+                    'None of the provided movies exist in the theatre',
+                );
+
+                throw createHttpError.BadRequest(
+                    'None of the provided movies exist in the theatre',
+                );
+            }
+
+            await this.theatreRepository.removeMoviesFromTheatre(
+                theatreId,
+                existingMovieIds,
+            );
+        }
+
+        this.logger.info('Movies updated in theatre successfully', {
+            theatreId,
+            movieIds,
+            insert,
+        });
+
+        return {
+            _id: theatre._id,
+            movies: theatre.movies,
+        };
     }
 }

@@ -31,4 +31,20 @@ export default class TheatreRepository {
     deleteTheatre(theatreId: string) {
         return this.theatre.findByIdAndDelete(theatreId);
     }
+
+    addMoviesToTheatre(theatreId: string, movieIds: string[]) {
+        return this.theatre.findByIdAndUpdate(
+            theatreId,
+            { $addToSet: { movies: { $each: movieIds } } },
+            { new: true },
+        );
+    }
+
+    removeMoviesFromTheatre(theatreId: string, movieIds: string[]) {
+        return this.theatre.findByIdAndUpdate(
+            theatreId,
+            { $pull: { movies: { $in: movieIds } } },
+            { new: true },
+        );
+    }
 }

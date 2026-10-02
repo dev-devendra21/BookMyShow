@@ -5,9 +5,9 @@ import {
     validateBodySchema,
     validateParamsSchema,
     validateQuerySchema,
-    // validateQuerySchema,
 } from './../../middlewares/validation.middleware.js';
 import {
+    movieIdsInTheatreSchema,
     theatreIdParamsSchema,
     theatreQuerySchema,
     theatreSchema,
@@ -54,6 +54,15 @@ route.delete(
     '/:id',
     validateParamsSchema(theatreIdParamsSchema),
     asyncHandler(theatreController.deleteTheatre.bind(theatreController)),
+);
+
+route.patch(
+    '/:id/movies',
+    validateParamsSchema(theatreIdParamsSchema),
+    validateBodySchema(movieIdsInTheatreSchema),
+    asyncHandler(
+        theatreController.updateMoviesInTheatre.bind(theatreController),
+    ),
 );
 
 export default route;

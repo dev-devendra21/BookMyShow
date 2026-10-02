@@ -62,9 +62,12 @@ const theatreSchema = new Schema<ITheatre>(
             default: 'ACTIVE',
         },
 
-        movies: {
-            type: [{ type: Schema.Types.ObjectId, ref: 'Movie' }],
-        },
+        movies: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Movie',
+            },
+        ],
     },
     {
         timestamps: true,
