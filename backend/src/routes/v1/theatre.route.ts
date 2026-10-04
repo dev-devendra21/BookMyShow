@@ -65,4 +65,10 @@ route.patch(
     ),
 );
 
+route.get(
+    '/:id/movies',
+    validateParamsSchema(theatreIdParamsSchema),
+    asyncHandler(theatreController.getMoviesInATheatre.bind(theatreController)),
+);
+
 export default route;

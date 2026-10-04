@@ -192,4 +192,20 @@ export default class TheatreService {
             movies: theatre.movies,
         };
     }
+
+    async getMoviesInATheatre(theatreId: string) {
+        this.logger.info(`Retrieving movies in theatre with ID: ${theatreId}`);
+
+        const theatre =
+            await this.theatreRepository.getMoviesInATheatre(theatreId);
+
+        if (!theatre) {
+            this.logger.warn(`Theatre with ID: ${theatreId} not found`);
+            throw createHttpError.NotFound(
+                'No such theatre found for the id provided',
+            );
+        }
+
+        return theatre;
+    }
 }

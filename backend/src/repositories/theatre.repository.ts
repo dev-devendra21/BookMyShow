@@ -47,4 +47,12 @@ export default class TheatreRepository {
             { new: true },
         );
     }
+
+    getMoviesInATheatre(theatreId: string) {
+        return this.theatre
+            .findById(theatreId)
+            .select('name address movies')
+            .populate('movies')
+            .lean();
+    }
 }

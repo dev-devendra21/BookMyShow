@@ -106,4 +106,17 @@ export default class TheatreController {
             ),
         );
     }
+
+    async getMoviesInATheatre(req: Request, res: Response) {
+        const { id: theatreId } = req.params as TheatreIdParamsDTO;
+
+        const theatreWithMovies =
+            await this.theatreService.getMoviesInATheatre(theatreId);
+
+        res.status(status.OK).json(
+            successResponse('Movies in theatre retrieved successfully', {
+                theatre: theatreWithMovies,
+            }),
+        );
+    }
 }
