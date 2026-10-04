@@ -7,6 +7,7 @@ import type {
     UpdateTheatreRequest,
 } from '../types/theatre.type.js';
 import type {
+    CheckMovieInATheatreParamsDTO,
     MovieIdsInTheatreDTO,
     TheatreIdParamsDTO,
     TheatreQueryDTO,
@@ -117,6 +118,17 @@ export default class TheatreController {
             successResponse('Movies in theatre retrieved successfully', {
                 theatre: theatreWithMovies,
             }),
+        );
+    }
+
+    async checkMovieInATheatre(req: Request, res: Response) {
+        const { theatreId, movieId } =
+            req.params as CheckMovieInATheatreParamsDTO;
+
+        await this.theatreService.checkMovieInATheatre(theatreId, movieId);
+
+        res.status(status.OK).json(
+            successResponse('Movie is present in a theatre', true),
         );
     }
 }

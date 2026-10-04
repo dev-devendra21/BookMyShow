@@ -1,4 +1,4 @@
-import type { Model } from 'mongoose';
+import { Types, type Model } from 'mongoose';
 import type { ITheatre } from '../models/theatre.model.js';
 import type {
     CreateTheatreDTO,
@@ -54,5 +54,15 @@ export default class TheatreRepository {
             .select('name address movies')
             .populate('movies')
             .lean();
+    }
+
+    async checkMovieInATheatre(theatreId: string, movieId: string) {
+        const theatre = await this.theatre.findById(theatreId).lean();
+
+        if (!theatre) {
+            return false;
+        }
+
+        return theatre?.movies?.some((id) => id.toString() === movieId);
     }
 }

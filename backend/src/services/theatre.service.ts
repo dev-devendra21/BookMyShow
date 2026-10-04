@@ -208,4 +208,24 @@ export default class TheatreService {
 
         return theatre;
     }
+
+    async checkMovieInATheatre(theatreId: string, movieId: string) {
+        this.logger.info(
+            `Checking is movie is present in a theatre ${theatreId}`,
+        );
+
+        const theatre = await this.theatreRepository.checkMovieInATheatre(
+            theatreId,
+            movieId,
+        );
+
+        if (!theatre) {
+            this.logger.warn(`Movie is not found in theatre`);
+            throw createHttpError.NotFound(
+                'No such movie found in theatre for the id provided',
+            );
+        }
+
+        return theatre;
+    }
 }

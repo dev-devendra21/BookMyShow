@@ -6,7 +6,6 @@ import type {
     UpdateMovieRequest,
 } from '../types/movie.type.js';
 import type MovieService from '../services/movie.service.js';
-import type { RELEASE_STATUS } from '../constant/movie.js';
 import type { MoviesQueryParamsDTO } from '../validators/movie.validator.js';
 
 export default class MovieController {

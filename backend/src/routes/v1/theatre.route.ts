@@ -7,6 +7,7 @@ import {
     validateQuerySchema,
 } from './../../middlewares/validation.middleware.js';
 import {
+    checkMovieInATheatreParamsSchema,
     movieIdsInTheatreSchema,
     theatreIdParamsSchema,
     theatreQuerySchema,
@@ -69,6 +70,14 @@ route.get(
     '/:id/movies',
     validateParamsSchema(theatreIdParamsSchema),
     asyncHandler(theatreController.getMoviesInATheatre.bind(theatreController)),
+);
+
+route.get(
+    '/:theatreId/movies/:movieId',
+    validateParamsSchema(checkMovieInATheatreParamsSchema),
+    asyncHandler(
+        theatreController.checkMovieInATheatre.bind(theatreController),
+    ),
 );
 
 export default route;

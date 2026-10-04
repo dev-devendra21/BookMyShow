@@ -45,6 +45,22 @@ export const theatreIdParamsSchema = z.object({
         .refine((id) => mongoose.isValidObjectId(id), 'Invalid theatre ID'),
 });
 
+export const checkMovieInATheatreParamsSchema = z.object({
+    theatreId: z
+        .string('Theatre id is required')
+        .refine(
+            (theatreId) => mongoose.isValidObjectId(theatreId),
+            'Invalid theatre ID',
+        ),
+
+    movieId: z
+        .string('Movie id is required')
+        .refine(
+            (movieId) => mongoose.isValidObjectId(movieId),
+            'Invalid movie ID',
+        ),
+});
+
 export const theatreQuerySchema = z.object({
     page: z
         .string()
@@ -89,5 +105,8 @@ export const updateTheatreSchema = theatreSchema.partial();
 export type CreateTheatreDTO = z.infer<typeof theatreSchema>;
 export type UpdateTheatreDTO = z.infer<typeof updateTheatreSchema>;
 export type TheatreIdParamsDTO = z.infer<typeof theatreIdParamsSchema>;
+export type CheckMovieInATheatreParamsDTO = z.infer<
+    typeof checkMovieInATheatreParamsSchema
+>;
 export type TheatreQueryDTO = z.infer<typeof theatreQuerySchema>;
 export type MovieIdsInTheatreDTO = z.infer<typeof movieIdsInTheatreSchema>;
