@@ -1,7 +1,7 @@
-import { model, Schema, type Model } from 'mongoose';
+import { model, Schema, type Model, Document } from 'mongoose';
 import { RELEASE_STATUS } from '../constant/movie.js';
 
-export interface IMovie {
+export interface IMovie extends Document {
     title: string;
     description: string;
     genre: string[];
