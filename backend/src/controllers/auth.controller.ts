@@ -4,6 +4,7 @@ import status from 'http-status';
 import { successResponse } from '../utils/api-response.js';
 import type { UserIdParamsDTO } from '../validators/user.validator.js';
 import type AuthService from '../services/auth.service.js';
+import type { VerifyEmailRequest } from '../types/auth.type.js';
 
 export default class AuthController {
     constructor(private readonly authService: AuthService) {}
@@ -13,6 +14,16 @@ export default class AuthController {
 
         res.status(status.CREATED).json(
             successResponse('Your account has been created successfully.', {
+                id: user._id,
+            }),
+        );
+    }
+
+    async verifyEmail(req: VerifyEmailRequest, res: Response) {
+        const user = await this.authService.verifyEmail(req.body);
+
+        res.status(status.OK).json(
+            successResponse('your email is verified successfully.', {
                 id: user._id,
             }),
         );
