@@ -1,0 +1,19 @@
+import { Queue } from 'bullmq';
+import RedisClient from '../lib/redis.js';
+
+const redis = RedisClient.getInstance();
+
+export const emailQueue = new Queue('email', {
+    connection: redis,
+    defaultJobOptions: {
+        attempts: 3,
+
+        backoff: {
+            type: 'exponential',
+            delay: 2000,
+        },
+
+        removeOnComplete: 100,
+        removeOnFail: 500,
+    },
+});

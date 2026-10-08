@@ -20,6 +20,38 @@ const envSchema = z.object({
     NODE_ENV: z.enum(['development', 'production', 'test'], {
         error: 'NODE_ENV is required and must be development, production, or test',
     }),
+
+    SMTP_HOST: z.string().min(1, 'SMTP_HOST is required'),
+
+    SMTP_PORT: z.coerce.number({
+        error: 'SMTP_PORT is required and must be a valid number',
+    }),
+
+    SMTP_SECURE: z
+        .enum(['true', 'false'], {
+            error: 'SMTP_SECURE must be true or false',
+        })
+        .transform((value) => value === 'true'),
+
+    SMTP_USER: z.string().min(1, 'SMTP_USER is required'),
+
+    SMTP_PASSWORD: z.string().min(1, 'SMTP_PASSWORD is required'),
+
+    EMAIL_FROM: z.string().min(1, 'EMAIL_FROM is required'),
+
+    REDIS_HOST: z.string().min(1, {
+        message: 'REDIS_HOST is required',
+    }),
+
+    REDIS_PORT: z.coerce.number().int().positive({
+        message: 'REDIS_PORT must be a positive integer',
+    }),
+
+    REDIS_PASSWORD: z.string().min(1, {
+        message: 'REDIS_PASSWORD is required',
+    }),
+
+    HMAC_SECRET: z.string(),
 });
 
 const _env = z.safeParse(envSchema, process.env);

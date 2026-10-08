@@ -1,0 +1,27 @@
+name: book-my-show-backend
+
+services:
+    redis:
+        image: redis/redis-stack:6.2.6-v19
+        container_name: redis
+        restart: always
+
+        environment:
+            REDIS_ARGS: '--requirepass book-my-show'
+
+        ports:
+            - '6379:6379'
+            - '8001:8001'
+
+        volumes:
+            - redis_data:/data
+
+        networks:
+            - book-my-show-network
+
+volumes:
+    redis_data:
+
+networks:
+    book-my-show-network:
+        driver: bridge

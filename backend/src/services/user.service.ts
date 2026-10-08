@@ -18,12 +18,21 @@ export default class UserService {
         const { email } = data;
         const existingUser = await this.userRepository.findUserByEmailId(email);
 
-        if (existingUser) {
-            this.logger.warn('Registration attempt with an existing email');
+        if (existingUser && existingUser.deletedAt === null) {
+            this.logger.warn(
+                'Registration failed: email address already registered',
+            );
 
             throw createHttpError.Conflict(
-                'An account with this email address already exists. Please use a different email or sign in.',
+                'An account with this email address is already registered.',
             );
+        }
+
+        if (existingUser && existingUser.deletedAt !== null) {
+            existingUser.deletedAt = null;
+            await existingUser.save();
+
+            return existingUser;
         }
 
         const userStatus =

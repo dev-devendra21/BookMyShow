@@ -12,6 +12,7 @@ export interface IUser extends Document {
     password: string;
     userRole: UserRole;
     userStatus: UserStatus;
+    isVerifiedEmail: boolean;
     deletedAt?: Date | null;
     softDelete(): Promise<this>;
 }
@@ -62,6 +63,11 @@ const userSchema = new Schema<IUser>(
                 message: 'Invalid status for user given',
             },
             default: USER_STATUS.APPROVED,
+        },
+
+        isVerifiedEmail: {
+            type: Boolean,
+            default: false,
         },
         deletedAt: {
             type: Date,
