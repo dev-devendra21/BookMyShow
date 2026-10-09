@@ -10,6 +10,7 @@ import {
 } from '../../validators/user.validator.js';
 import userModule from '../../modules/user.module.js';
 import asyncHandler from '../../utils/async-handler.js';
+import { authMiddleware } from '../../middlewares/auth.middleware.js';
 
 const route = Router();
 
@@ -33,6 +34,12 @@ route.patch(
     validateParamsSchema(userIdParamsSchema),
     validateBodySchema(updateUserSchema),
     asyncHandler(userController.updateUser.bind(userController)),
+);
+
+route.get(
+    '/me',
+    authMiddleware,
+    asyncHandler(userController.getCurrentUser.bind(userController)),
 );
 
 route.get(

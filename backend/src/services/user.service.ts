@@ -77,6 +77,16 @@ export default class UserService {
         return user;
     }
 
+    async getCurrentUser(userId: string) {
+        const user = await this.userRepository.getCurrentUserById(userId);
+
+        if (!user) {
+            throw createHttpError.NotFound('Current user account was not found.');
+        }
+
+        return user;
+    }
+
     async deleteUserById(params: UserIdParamsDTO) {
         const { id } = params;
         const user = await this.userRepository.getUserById(id);

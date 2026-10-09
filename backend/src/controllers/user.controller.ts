@@ -7,6 +7,7 @@ import type {
 import status from 'http-status';
 import { successResponse } from '../utils/api-response.js';
 import type { UserIdParamsDTO } from '../validators/user.validator.js';
+import type { AuthenticatedRequest } from '../middlewares/auth.middleware.js';
 
 export default class UserController {
     constructor(private readonly userService: UserService) {}
@@ -43,6 +44,14 @@ export default class UserController {
             successResponse('fetch the user info successfully', {
                 user,
             }),
+        );
+    }
+
+    async getCurrentUser(req: AuthenticatedRequest, res: Response) {
+        const user = await this.userService.getCurrentUser(req.user!.userId);
+
+        return res.status(status.OK).json(
+            successResponse('Fetched current user successfully.', { user }),
         );
     }
 

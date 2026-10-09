@@ -22,6 +22,10 @@ export default class UserRepository {
         return this.user.findById(userId);
     }
 
+    getCurrentUserById(userId: string) {
+        return this.user.findById(userId).select('-password');
+    }
+
     updateUser(userId: string, data: UpdateUserDTO) {
         return this.user.findByIdAndUpdate(userId, data, {
             new: true,
