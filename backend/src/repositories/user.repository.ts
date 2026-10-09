@@ -18,6 +18,10 @@ export default class UserRepository {
         });
     }
 
+    findUserById(userId: string) {
+        return this.user.findById(userId);
+    }
+
     updateUser(userId: string, data: UpdateUserDTO) {
         return this.user.findByIdAndUpdate(userId, data, {
             new: true,

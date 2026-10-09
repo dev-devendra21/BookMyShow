@@ -49,7 +49,15 @@ export const resetPasswordSchema = z.object({
         .min(6, 'Password must be at least 6 characters'),
 });
 
+export const changePasswordSchema = z.object({
+    currentPassword: z.string('Current password is required').min(1),
+    newPassword: z
+        .string('New password is required')
+        .min(6, 'Password must be at least 6 characters'),
+});
+
 export type VerifyEmailDTO = z.infer<typeof verifyEmailSchema>;
 export type LoginDTO = z.infer<typeof loginSchema>;
 export type ForgotPasswordDTO = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordDTO = z.infer<typeof resetPasswordSchema>;
+export type ChangePasswordDTO = z.infer<typeof changePasswordSchema>;

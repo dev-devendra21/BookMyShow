@@ -5,6 +5,7 @@ import { successResponse } from '../utils/api-response.js';
 import type AuthService from '../services/auth.service.js';
 import type {
     ForgotPasswordRequest,
+    ChangePasswordRequest,
     LoginRequest,
     ResetPasswordRequest,
     VerifyEmailRequest,
@@ -54,6 +55,14 @@ export default class AuthController {
         return res
             .status(status.OK)
             .json(successResponse('Your password has been reset successfully.'));
+    }
+
+    async changePassword(req: ChangePasswordRequest, res: Response) {
+        await this.authService.changePassword(req.user!.userId, req.body);
+
+        return res
+            .status(status.OK)
+            .json(successResponse('Your password has been changed successfully.'));
     }
 
     async login(req: LoginRequest, res: Response) {

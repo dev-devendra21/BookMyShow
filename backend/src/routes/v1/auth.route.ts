@@ -3,6 +3,7 @@ import authModule from '../../modules/auth.module.js';
 import asyncHandler from '../../utils/async-handler.js';
 import { validateBodySchema } from '../../middlewares/validation.middleware.js';
 import {
+    changePasswordSchema,
     forgotPasswordSchema,
     loginSchema,
     resetPasswordSchema,
@@ -51,5 +52,13 @@ route.post(
     '/reset-password',
     validateBodySchema(resetPasswordSchema),
     asyncHandler(authController.resetPassword.bind(authController)),
+);
+
+route.put(
+    '/change-password',
+    csrfMiddleware,
+    authMiddleware,
+    validateBodySchema(changePasswordSchema),
+    asyncHandler(authController.changePassword.bind(authController)),
 );
 export default route;

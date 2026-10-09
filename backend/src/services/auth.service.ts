@@ -6,6 +6,7 @@ import { emailQueue } from '../queues/email.queue.js';
 import { type Redis } from 'ioredis';
 import type {
     ForgotPasswordDTO,
+    ChangePasswordDTO,
     LoginDTO,
     ResetPasswordDTO,
     VerifyEmailDTO,
@@ -192,6 +193,25 @@ export default class AuthService {
         user.password = data.newPassword;
         await user.save();
         await this.redis.del(otpKey);
+    }
+
+    async changePassword(userId: string, data: ChangePasswordDTO) {
+        const user = await this.userRepository.findUserById(userId);
+
+        if (!user) {
+            throw createHttpError.Unauthorized('Authentication required');
+        }
+
+        const isCurrentPasswordValid = await user.comparePassword(
+            data.currentPassword,
+        );
+
+        if (!isCurrentPasswordValid) {
+            throw createHttpError.BadRequest('Current password is incorrect');
+        }
+
+        user.password = data.newPassword;
+        await user.save();
     }
 
     async login(data: LoginDTO) {
