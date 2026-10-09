@@ -26,6 +26,14 @@ const emailWorker = new Worker(
                 break;
             }
 
+            case 'forgot-password-otp': {
+                const { email, otp } = job.data;
+
+                await emailService.sendForgotPasswordOtp(email, otp);
+
+                break;
+            }
+
             default:
                 throw new Error(`Unknown email job: ${job.name}`);
         }

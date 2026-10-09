@@ -15,6 +15,7 @@ export interface IUser extends Document {
     isVerifiedEmail: boolean;
     deletedAt?: Date | null;
     softDelete(): Promise<this>;
+    comparePassword(plainPassword: string): Promise<boolean>;
 }
 
 const userSchema = new Schema<IUser>(
@@ -93,15 +94,15 @@ userSchema.pre('save', async function () {
     this.password = await argon2.hash(this.password);
 });
 
-userSchema.methods.verifyPassword = async function (
-    plainPassword: string,
-): Promise<boolean> {
-    return await argon2.verify(this.password, plainPassword);
-};
-
 userSchema.methods.softDelete = async function (this: IUser): Promise<IUser> {
     this.deletedAt = new Date();
     return await this.save();
+};
+
+userSchema.methods.comparePassword = async function (
+    plainPassword: string,
+): Promise<boolean> {
+    return await argon2.verify(this.password, plainPassword);
 };
 
 const UserModel: Model<IUser> = model<IUser>('User', userSchema);
