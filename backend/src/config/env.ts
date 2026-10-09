@@ -52,6 +52,8 @@ const envSchema = z.object({
     }),
 
     HMAC_SECRET: z.string(),
+    JWT_REFRESH_SECRET: z.string(),
+    JWT_ACCESS_SECRET: z.string(),
 });
 
 const _env = z.safeParse(envSchema, process.env);
